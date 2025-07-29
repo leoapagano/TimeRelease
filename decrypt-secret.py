@@ -4,6 +4,7 @@ import json
 import time
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
+from tqdm import tqdm
 
 
 def base64_to_byte_str(base64_string):
@@ -23,7 +24,7 @@ def decrypt_secret(enc_package):
 	# Compute puzzle result r
 	start_time = time.time()
 	r = base
-	for _ in range(iterations):
+	for _ in tqdm(range(iterations), desc="Unlocking", unit="iters"):
 		r = pow(r, 2, modulus)
 	end_time = time.time()
 	print(f"Completed in {end_time - start_time:.2f} seconds") # move later
