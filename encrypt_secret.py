@@ -119,7 +119,7 @@ if __name__ == "__main__":
 	else:
 		# Ask for raw iterations
 		print("How many iterations? Note that modern CPUs can handle upwards of 100,000 iterations per second.")
-		iters = int(input("[int] ")) * 2**18
+		iters = int(input("[int] "))
 
 	# Get secret
 	print("Is your secret a string or a file?")
