@@ -8,6 +8,10 @@ Since each cryptographic step requires the last, it (by design) cannot be parall
 
 This could potentially be useful if you want to wait, say, an hour, before being able to access a password, as a form of stolen device protection.
 
+## WARNING!
+
+Always keep your output `timerelease.json` file secret, treating it as if it were a password. It is effectively unencrypted as it can be used to decrypt the secret (if such an attacker has sufficient time to complete the puzzle).
+
 ## Setup
 
 To get it up and running, first, install dependencies:
