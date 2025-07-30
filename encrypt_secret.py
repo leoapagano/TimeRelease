@@ -1,6 +1,7 @@
 import base64
 import hashlib
 import json
+import pathlib
 import random
 import time
 from Crypto.Cipher import AES
@@ -121,8 +122,26 @@ if __name__ == "__main__":
 		iters = int(input("[int] ")) * 2**18
 
 	# Get secret
-	print("Enter your secret:")
-	secret = input(">>> ").encode()
+	print("Is your secret a string or a file?")
+	while True:
+		response = input("[string/file] ").strip().lower()
+		if response in ("s", "str", "string"):
+			print("Enter your secret:")
+			secret = input(">>> ").encode()
+			break
+		elif response in ("f", "file"):
+			print("Enter the secret file's path:")
+			path = pathlib.Path(input(">>> "))
+			if path.is_file():
+				with open(path, 'rb') as f:
+					secret = f.read() 
+				print(secret)
+				break
+			else:
+				print("This path either is a directory or does not exist.")
+				print("Please try again.")
+		else:
+			print("Please enter 'string' or 'file'.")
 
 	# Encrypt secret & get JSON package
 	enc_package = encrypt_secret(secret, iters)
