@@ -13,8 +13,9 @@ def byte_str_to_base64(byte_string):
 	return base64.b64encode(byte_string).decode('ASCII')
 
 
-def encrypt_secret(secret, iterations):
+def encrypt_secret(secret, iterations, logging=True):
 	# Create new (symmetric) AES key and encrypt secret with it
+	if logging: print("Generating encryption key...")
 	aes_key = get_random_bytes(16)
 	cipher = AES.new(aes_key, AES.MODE_CBC)
 	secret_iv = cipher.iv
@@ -22,6 +23,7 @@ def encrypt_secret(secret, iterations):
 
 	# Time-lock puzzle setup
 	# Generate N = p * q
+	if logging: print("Preparing time lock...")
 	p = nextprime(random.getrandbits(512))
 	q = nextprime(random.getrandbits(512))
 	modulus = p * q
@@ -31,9 +33,11 @@ def encrypt_secret(secret, iterations):
 	r = pow(base, pow(2, iterations, (p - 1)*(q - 1)), modulus)
 
 	# Derive AES key from r (e.g. using SHA256)
+	if logging: print("Deriving AES key from time lock...")
 	derived_key = hashlib.sha256(str(r).encode()).digest()[:16]
 
 	# Encrypt AES key with derived key
+	if logging: print("Encrypting derived key...")
 	cipher2 = AES.new(derived_key, AES.MODE_CBC)
 	key_iv = cipher2.iv
 	encrypted_key = cipher2.encrypt(pad(aes_key, AES.block_size))
