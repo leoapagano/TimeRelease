@@ -18,10 +18,10 @@ source ./venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Then, run `encrypt-secret.py` interactively:
+Then, run `encrypt_secret.py` interactively:
 
 ```
-python3 encrypt-secret.py
+python3 encrypt_secret.py
 ```
 
 And follow the instructions provided.
