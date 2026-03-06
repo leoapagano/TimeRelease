@@ -4,31 +4,7 @@ from pathlib import Path
 from .bench import run_benchmark
 
 
-def main_enc(infile, outfile):
-	# Benchmark
-	print("Would you like to benchmark your CPU to provide more accurate unlock times? (Note that this may be thwarted by using a CPU with better single-core performance)")
-	while True:
-		response = input("[y/n] ").strip().lower()
-		if response in ("y", "yes"):
-			bench = True
-			break
-		elif response in ("n", "no"):
-			bench = False
-			break
-		else:
-			print("Please enter 'y' or 'n'.")
-
-	if bench:
-		# Run benchmark
-		print("TimeRelease is benchmarking your CPU. This may take up to a minute.")
-		ips = run_benchmark(logging=False)
-		print("Approximately how long would you like the unlock process to take on your CPU (in seconds)?")
-		iters = int(float(input("[float] ")) * ips)
-	else:
-		# Ask for raw iterations
-		print("How many iterations? Note that modern CPUs can handle upwards of 100,000 iterations per second.")
-		iters = int(input("[int] "))
-
+def main_enc(infile, outfile, iters):
 	# Read infile
 	with open(infile, 'rb') as f:
 		secret = f.read()
@@ -70,7 +46,26 @@ def main(argv=None):
 		metavar=("INFILE", "OUTFILE"),
 		help="Decrypt input file to output file path",
 	)
+	iters_group = parser.add_mutually_exclusive_group()
+	iters_group.add_argument(
+		"--iters",
+		type=int,
+		metavar="N",
+		help="Number of iterations for encryption (required with --encrypt)",
+	)
+	iters_group.add_argument(
+		"--time",
+		type=float,
+		metavar="SECONDS",
+		help="Target decryption time in seconds; benchmarks your CPU to compute iterations (required with --encrypt)",
+	)
 	args = parser.parse_args(argv)
+
+	# Validate --iters/--time usage
+	if args.encrypt and args.iters is None and args.time is None:
+		parser.error("--encrypt requires either --iters or --time")
+	if (args.iters is not None or args.time is not None) and not args.encrypt:
+		parser.error("--iters and --time can only be used with --encrypt")
 
 	# Determine and validate infile and outfile
 	if args.encrypt:
@@ -91,8 +86,14 @@ def main(argv=None):
 
 	# Begin encrypting/decrypting
 	if args.encrypt:
+		if args.iters is not None:
+			iters = args.iters
+		else:
+			print("TimeRelease is benchmarking your CPU. This may take up to a minute.")
+			ips = run_benchmark(logging=False)
+			iters = int(args.time * ips)
 		print(f"Encrypting {infile} -> {outfile}:")
-		main_enc(infile, outfile)
+		main_enc(infile, outfile, iters)
 	elif args.decrypt:
 		print(f"Decrypting {infile} -> {outfile}:")
 		main_dec(infile, outfile)
