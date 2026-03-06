@@ -12,6 +12,17 @@ This could potentially be useful if you want to wait, for example, an hour, befo
 
 Always keep your output `timerelease.json` file secret, treating it as if it were a password. It is effectively unencrypted as it can be used to decrypt the secret (if such an attacker has sufficient time to complete the puzzle).
 
+## Table of Contents
+
+- [Interactive Usage](#interactive-usage)
+	- [Setup](#setup)
+	- [Encryption](#encryption)
+	- [Decryption](#decryption)
+- [Module API](#module-api)
+- [Development Usage](#development-usage)
+
+---
+
 ## Interactive Usage
 
 ### Setup
