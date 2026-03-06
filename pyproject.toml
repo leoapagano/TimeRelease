@@ -16,7 +16,13 @@ maintainers = [
 ]
 license = { file = "LICENSE" }
 keywords = [
-	"TimeRelease", "Time", "Release", "Crypto", "Cryptography"
+	"TimeRelease",
+	"Time",
+	"Release",
+	"Encryption",
+	"Crypto",
+	"Cryptography",
+	"Pagano"
 ]
 classifiers = [
 	"Programming Language :: Python :: 3.13",
