@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "TimeRelease"
+version = "0.1.0"
+requires-python = ">=3.9"
+description = "Python utility to cryptographically lock secrets for a preset amount of time."
+readme = "README.md"
+authors = [
+	{ name = "Leo Pagano", email = "leo@leoapagano.com" }
+]
+maintainers = [
+	{ name = "Leo Pagano", email = "leo@leoapagano.com" }
+]
+license = { file = "LICENSE" }
+keywords = [
+	"TimeRelease", "Time", "Release", "Crypto", "Cryptography"
+]
+classifiers = [
+	"Programming Language :: Python :: 3.9",
+	"Programming Language :: Python :: Implementation :: CPython",
+	"License :: OSI Approved :: MIT License",
+	"Intended Audience :: Developers",
+	"Operating System :: POSIX :: Linux",
+	"Operating System :: Microsoft :: Windows",
+	"Operating System :: MacOS",
+	"Operating System :: MacOS :: MacOS X",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/leoapagano/TimeRelease"
+Documentation = "https://github.com/leoapagano/TimeRelease/blob/main/README.md"
