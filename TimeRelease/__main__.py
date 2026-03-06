@@ -6,32 +6,6 @@ from .decrypt import decrypt_secret
 from .encrypt import encrypt_secret
 
 
-def main_enc(infile, outfile, iters):
-	# Read infile
-	with open(infile, 'rb') as f:
-		secret = f.read()
-
-	# Encrypt secret & get JSON package
-	enc_package = encrypt_secret(secret, iters)
-
-	# Write outfile
-	with open(outfile, 'w') as f:
-		json.dump(enc_package, f, indent=4)
-
-
-def main_dec(infile, outfile):
-	# Read infile
-	with open(infile, 'r') as f:
-		enc_package = json.load(f)
-
-	# Decrypt
-	decrypted = decrypt_secret(enc_package)
-	
-	# Write outfile
-	with open(outfile, 'wb') as f:
-		f.write(decrypted)
-
-
 def main(argv=None):
 	# Read arguments
 	parser = argparse.ArgumentParser(prog="TimeRelease")
@@ -86,19 +60,43 @@ def main(argv=None):
 		print(f"{outfile} cannot be overwritten: is a directory")
 		return -1
 
-	# Begin encrypting/decrypting
+	# ENCRYPTION
 	if args.encrypt:
+		# Determine # of iterations
 		if args.iters is not None:
 			iters = args.iters
 		else:
 			print("TimeRelease is benchmarking your CPU. This may take up to a minute.")
 			ips = run_benchmark(logging=False)
 			iters = int(args.time * ips)
+		
 		print(f"Encrypting {infile} -> {outfile}:")
-		main_enc(infile, outfile, iters)
+
+		# Read infile
+		with open(infile, 'rb') as f:
+			secret = f.read()
+
+		# Encrypt secret & get JSON package
+		enc_package = encrypt_secret(secret, iters)
+
+		# Write outfile
+		with open(outfile, 'w') as f:
+			json.dump(enc_package, f, indent=4)
+	
+	# DECRYPTION
 	elif args.decrypt:
 		print(f"Decrypting {infile} -> {outfile}:")
-		main_dec(infile, outfile)
+		
+		# Read infile
+		with open(infile, 'r') as f:
+			enc_package = json.load(f)
+
+		# Decrypt
+		decrypted = decrypt_secret(enc_package)
+		
+		# Write outfile
+		with open(outfile, 'wb') as f:
+			f.write(decrypted)
 
 
 if __name__ == "__main__":
