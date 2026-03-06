@@ -40,6 +40,7 @@ dev = [
 	"build",
 	"pre-commit",
 	"pytest",
+	"ruff",
 	"twine"
 ]
 
@@ -49,3 +50,6 @@ Documentation = "https://github.com/leoapagano/TimeRelease/blob/main/README.md"
 
 [project.scripts]
 timerelease = "TimeRelease.__main__:main"
+
+[tool.ruff.format]
+indent-style = "tab"
