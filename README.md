@@ -94,3 +94,16 @@ python3 -m venv ./venv
 source ./venv/bin/activate
 pip install -e .
 ```
+
+To build a distribution package, first update the version number in `pyproject.toml`, and make a tag for that release version at the current commit. Then:
+
+```bash
+pip install -e .[dev]
+python3 -m build
+```
+
+To upload this build to PyPI, run:
+
+```bash
+python3 -m twine upload dist/* --skip-existing
+```

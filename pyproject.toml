@@ -35,6 +35,12 @@ dependencies = [
 	"tqdm==4.67.1"
 ]
 
+[project.optional-dependencies]
+dev = [
+	"twine",
+	"build"
+]
+
 [project.urls]
 Homepage = "https://github.com/leoapagano/TimeRelease"
 Documentation = "https://github.com/leoapagano/TimeRelease/blob/main/README.md"
