@@ -10,7 +10,7 @@ This could potentially be useful if you want to wait, for example, an hour, befo
 
 ## WARNING!
 
-Always keep your output `timerelease.json` file secret, treating it as if it were a password. It is effectively unencrypted as it can be used to decrypt the secret (if such an attacker has sufficient time to complete the puzzle).
+Always keep your "encrypted" file secret, treating it as if it were a password. It is effectively unencrypted as it can be used to decrypt the secret (if such an attacker has sufficient time to complete the puzzle) without any other knowledge of the secret or the individual who encrypted it.
 
 ## Table of Contents
 
