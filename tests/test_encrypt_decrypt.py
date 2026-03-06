@@ -1,4 +1,5 @@
-from TimeRelease import encrypt_secret, decrypt_secret
+from TimeRelease import decrypt_secret, encrypt_secret
+
 
 def test_hello_world():
 	"""
@@ -6,6 +7,6 @@ def test_hello_world():
 	produces the same output that it started with.
 	"""
 	input = b"hello world"
-	encrypted = encrypt_secret(input, 2 ** 16, logging=False)
+	encrypted = encrypt_secret(input, 2**16, logging=False)
 	decrypted = decrypt_secret(encrypted, logging=False)
 	assert decrypted == b"hello world"

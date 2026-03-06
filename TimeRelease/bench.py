@@ -1,6 +1,7 @@
 import random
-from sympy import nextprime
 import time
+
+from sympy import nextprime
 
 
 def run_single_benchmark(iterations, logging=True):
@@ -10,13 +11,15 @@ def run_single_benchmark(iterations, logging=True):
 	If `logging` (defaults to True) is set to True, extra debug information is printed.
 	"""
 	# Setup dummy puzzle parameters
-	if logging: print("Preparing time lock...")
+	if logging:
+		print("Preparing time lock...")
 	p = nextprime(random.getrandbits(512))
 	q = nextprime(random.getrandbits(512))
 	modulus = p * q
 
 	# Execute & time it
-	if logging: print("Running benchmark...")
+	if logging:
+		print("Running benchmark...")
 	start_time = time.time()
 	r = random.randint(2, modulus - 1)
 	for _ in range(iterations):
@@ -38,13 +41,15 @@ def run_benchmark(benches=10, logging=True):
 	execution_time = 0
 	while execution_time < 1:
 		iterations *= 2
-		if logging: print(f"Running benchmark @ iterations={iterations}")
+		if logging:
+			print(f"Running benchmark @ iterations={iterations}")
 		execution_time = run_single_benchmark(iterations, logging=logging)
-	
+
 	# Run benches (default: 10) benchmarks with this number of iterations
 	results = []
 	for i in range(benches):
-		if logging: print(f"Running standard benchmark {i+1} / {benches}")
+		if logging:
+			print(f"Running standard benchmark {i + 1} / {benches}")
 		results.append(run_single_benchmark(iterations, logging=logging))
 
 	# Determine average iterations/sec and return

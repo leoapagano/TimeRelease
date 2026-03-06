@@ -1,6 +1,7 @@
 import argparse
 import json
 from pathlib import Path
+
 from .bench import run_benchmark
 from .decrypt import decrypt_secret
 from .encrypt import encrypt_secret
@@ -69,33 +70,33 @@ def main(argv=None):
 			print("TimeRelease is benchmarking your CPU. This may take up to a minute.")
 			ips = run_benchmark(logging=False)
 			iters = int(args.time * ips)
-		
+
 		print(f"Encrypting {infile} -> {outfile}:")
 
 		# Read infile
-		with open(infile, 'rb') as f:
+		with open(infile, "rb") as f:
 			secret = f.read()
 
 		# Encrypt secret & get JSON package
 		enc_package = encrypt_secret(secret, iters)
 
 		# Write outfile
-		with open(outfile, 'w') as f:
+		with open(outfile, "w") as f:
 			json.dump(enc_package, f, indent=4)
-	
+
 	# DECRYPTION
 	elif args.decrypt:
 		print(f"Decrypting {infile} -> {outfile}:")
-		
+
 		# Read infile
-		with open(infile, 'r') as f:
+		with open(infile, "r") as f:
 			enc_package = json.load(f)
 
 		# Decrypt
 		decrypted = decrypt_secret(enc_package)
-		
+
 		# Write outfile
-		with open(outfile, 'wb') as f:
+		with open(outfile, "wb") as f:
 			f.write(decrypted)
 
 
