@@ -8,6 +8,10 @@ from .b64utils import byte_str_to_base64
 
 
 def encrypt_secret(secret, iterations, logging=True):
+	"""
+	Given a byte string `secret`, encrypt_secret() applies `iterations` iterations to it, "encrypting" it.
+	If `logging` (defaults to True) is set to True, extra debug information is printed.
+	"""
 	# Create new (symmetric) AES key and encrypt secret with it
 	if logging: print("Generating encryption key...")
 	aes_key = get_random_bytes(16)
