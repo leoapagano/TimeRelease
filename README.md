@@ -96,7 +96,7 @@ pip install -e .[dev]
 pre-commit install 
 ```
 
-To test the codebase, simply run `pytest`. To apply proper formatting to the codebase, run `ruff format .`. And to ensure that the code has no other issues with PEP8 compliance, run `ruff check`. Please do all of these things before you commit, and not after!
+To test the codebase, simply run `pytest`. To apply proper formatting to the codebase, run `ruff format .`. To ensure that the code has no other issues with PEP8 compliance, run `ruff check`. And to ensure that there  are no type errors, please run `ty check TimeRelease`. Please do all of these things before you commit, and not after!
 
 To build a distribution package, first update the version number in `pyproject.toml`, and make a tag for that release version at the current commit. Then:
 
