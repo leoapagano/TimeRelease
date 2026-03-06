@@ -2,6 +2,8 @@ import argparse
 import json
 from pathlib import Path
 from .bench import run_benchmark
+from .decrypt import decrypt_secret
+from .encrypt import encrypt_secret
 
 
 def main_enc(infile, outfile, iters):
