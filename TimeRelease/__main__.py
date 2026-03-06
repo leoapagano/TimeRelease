@@ -1,5 +1,4 @@
 import argparse
-import base64
 import hashlib
 import json
 from pathlib import Path
@@ -10,11 +9,7 @@ from Crypto.Util.Padding import pad, unpad
 from Crypto.Random import get_random_bytes
 from sympy import nextprime
 from tqdm import tqdm
-
-
-def base64_to_byte_str(base64_string):
-	"""Converts a base64 string to its byte string representation."""
-	return base64.b64decode(base64_string.encode('ASCII'))
+from .b64utils import base64_to_byte_str, byte_str_to_base64
 
 
 def decrypt_secret(enc_package, logging=True):
@@ -53,11 +48,6 @@ def decrypt_secret(enc_package, logging=True):
 	cipher = AES.new(aes_key, AES.MODE_CBC, iv=secret_iv)
 	secret = unpad(cipher.decrypt(encrypted_secret), AES.block_size)
 	return secret
-
-
-def byte_str_to_base64(byte_string):
-	"""Converts a byte string to its base64 (non-byte string) representation."""
-	return base64.b64encode(byte_string).decode('ASCII')
 
 
 def run_single_benchmark(iterations, logging=True):
