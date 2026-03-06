@@ -92,13 +92,13 @@ To install development versions of this package, clone this repo and `cd` into i
 ```bash
 python3 -m venv ./venv
 source ./venv/bin/activate
-pip install -e .
+pip install -e .[dev]
+pre-commit install 
 ```
 
 To build a distribution package, first update the version number in `pyproject.toml`, and make a tag for that release version at the current commit. Then:
 
 ```bash
-pip install -e .[dev]
 python3 -m build
 ```
 

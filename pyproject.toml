@@ -37,8 +37,9 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-	"twine",
-	"build"
+	"build",
+	"pre-commit",
+	"twine"
 ]
 
 [project.urls]
