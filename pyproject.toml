@@ -29,10 +29,10 @@ classifiers = [
 	"Operating System :: MacOS :: MacOS X",
 ]
 dependencies = [
-	"mpmath==1.3.0",
-	"pycryptodome==3.23.0",
-	"sympy==1.14.0",
-	"tqdm==4.67.1"
+	"mpmath~=1.0",
+	"pycryptodome~=3.0",
+	"sympy~=1.0",
+	"tqdm~=4.0"
 ]
 
 [project.optional-dependencies]
