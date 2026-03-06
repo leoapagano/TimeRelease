@@ -72,19 +72,28 @@ def main(argv=None):
 	)
 	args = parser.parse_args(argv)
 
+	# Determine and validate infile and outfile
 	if args.encrypt:
 		infile, outfile = Path(args.encrypt[0]), Path(args.encrypt[1])
-		if not infile.is_file():
-			print(f"{infile} does not exist or is not a file")
-			return -1
-		print(f"Encrypting {infile} -> {outfile}:")
-		main_enc(infile, outfile)
-
 	elif args.decrypt:
 		infile, outfile = Path(args.decrypt[0]), Path(args.decrypt[1])
-		if not infile.is_file():
-			print(f"{infile} does not exist or is not a file")
+	if not infile.is_file():
+		print(f"{infile} does not exist or is not a file")
+		return -1
+	if outfile.is_file():
+		print(f"{outfile} will be overwritten! Proceed anyway? [y/n]")
+		if input(">>> ").strip().lower() != "y":
+			print("Exiting.")
 			return -1
+	if outfile.is_dir():
+		print(f"{outfile} cannot be overwritten: is a directory")
+		return -1
+
+	# Begin encrypting/decrypting
+	if args.encrypt:
+		print(f"Encrypting {infile} -> {outfile}:")
+		main_enc(infile, outfile)
+	elif args.decrypt:
 		print(f"Decrypting {infile} -> {outfile}:")
 		main_dec(infile, outfile)
 
