@@ -1,0 +1,4 @@
+mpmath~=1.0
+pycryptodome~=3.0
+sympy~=1.0
+tqdm~=4.0

@@ -1,0 +1,10 @@
+mpmath~=1.0
+pycryptodome~=3.0
+sympy~=1.0
+tqdm~=4.0
+
+build==1.4.0
+pre-commit==4.5.1
+pytest==9.0.2
+ruff==0.15.5
+twine==6.2.0
