@@ -39,6 +39,7 @@ dependencies = [
 dev = [
 	"build",
 	"pre-commit",
+	"pytest",
 	"twine"
 ]
 

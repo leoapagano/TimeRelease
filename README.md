@@ -96,6 +96,8 @@ pip install -e .[dev]
 pre-commit install 
 ```
 
+To test the codebase, simply run `pytest`.
+
 To build a distribution package, first update the version number in `pyproject.toml`, and make a tag for that release version at the current commit. Then:
 
 ```bash
