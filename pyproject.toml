@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "TimeRelease"
 version = "0.1.0"
-requires-python = ">=3.9"
+requires-python = ">=3.13"
 description = "Python utility to cryptographically lock secrets for a preset amount of time."
 readme = "README.md"
 authors = [
@@ -19,7 +19,7 @@ keywords = [
 	"TimeRelease", "Time", "Release", "Crypto", "Cryptography"
 ]
 classifiers = [
-	"Programming Language :: Python :: 3.9",
+	"Programming Language :: Python :: 3.13",
 	"Programming Language :: Python :: Implementation :: CPython",
 	"License :: OSI Approved :: MIT License",
 	"Intended Audience :: Developers",
