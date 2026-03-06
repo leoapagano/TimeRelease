@@ -4,7 +4,7 @@ import time
 from sympy import nextprime
 
 
-def run_single_benchmark(iterations, logging=True):
+def run_single_benchmark(iterations: int, logging: bool = True) -> float:
 	"""
 	Determines how long it takes for the CPU to run a fixed number of `iterations`.
 	Amount of time elapsed is returned in seconds as a float.
@@ -29,7 +29,7 @@ def run_single_benchmark(iterations, logging=True):
 	return end_time - start_time
 
 
-def run_benchmark(benches=10, logging=True):
+def run_benchmark(benches: int = 10, logging: bool = True) -> int:
 	"""
 	Determines how many iterations a single core of the user's CPU is capable of processing, on average, per second (as an integer).
 	`benches` (defaults to 10) describes the number of times the benchmark will be run.

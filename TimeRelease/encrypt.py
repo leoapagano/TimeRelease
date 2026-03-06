@@ -1,5 +1,6 @@
 import hashlib
 import random
+from typing import Any
 
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
@@ -9,7 +10,9 @@ from sympy import nextprime
 from .b64utils import byte_str_to_base64
 
 
-def encrypt_secret(secret, iterations, logging=True):
+def encrypt_secret(
+	secret: bytes, iterations: int, logging: bool = True
+) -> dict[str, Any]:
 	"""
 	Given a byte string `secret`, encrypt_secret() applies `iterations` iterations to it, "encrypting" it.
 	If `logging` (defaults to True) is set to True, extra debug information is printed.

@@ -7,7 +7,7 @@ from .decrypt import decrypt_secret
 from .encrypt import encrypt_secret
 
 
-def main(argv=None):
+def main(argv: list[str] | None = None) -> int | None:
 	# Read arguments
 	parser = argparse.ArgumentParser(prog="TimeRelease")
 	group = parser.add_mutually_exclusive_group(required=True)
