@@ -28,7 +28,12 @@ classifiers = [
 	"Operating System :: MacOS",
 	"Operating System :: MacOS :: MacOS X",
 ]
-dependencies = []
+dependencies = [
+	"mpmath==1.3.0",
+	"pycryptodome==3.23.0",
+	"sympy==1.14.0",
+	"tqdm==4.67.1"
+]
 
 [project.urls]
 Homepage = "https://github.com/leoapagano/TimeRelease"
