@@ -1,7 +1,8 @@
+import argparse
 import base64
 import hashlib
 import json
-import pathlib
+from pathlib import Path
 import random
 import time
 from Crypto.Cipher import AES
@@ -9,9 +10,6 @@ from Crypto.Util.Padding import pad, unpad
 from Crypto.Random import get_random_bytes
 from sympy import nextprime
 from tqdm import tqdm
-
-
-MODE = "encrypt"
 
 
 def base64_to_byte_str(base64_string):
@@ -143,7 +141,7 @@ def encrypt_secret(secret, iterations, logging=True):
 	}
 
 
-def main_enc():
+def main_enc(infile, outfile):
 	# Benchmark
 	print("Would you like to benchmark your CPU to provide more accurate unlock times? (Note that this may be thwarted by using a CPU with better single-core performance)")
 	while True:
@@ -168,47 +166,65 @@ def main_enc():
 		print("How many iterations? Note that modern CPUs can handle upwards of 100,000 iterations per second.")
 		iters = int(input("[int] "))
 
-	# Get secret
-	print("Is your secret a string or a file?")
-	while True:
-		response = input("[string/file] ").strip().lower()
-		if response in ("s", "str", "string"):
-			print("Enter your secret:")
-			secret = input(">>> ").encode()
-			break
-		elif response in ("f", "file"):
-			print("Enter the secret file's path:")
-			path = pathlib.Path(input(">>> "))
-			if path.is_file():
-				with open(path, 'rb') as f:
-					secret = f.read() 
-				print(secret)
-				break
-			else:
-				print("This path either is a directory or does not exist.")
-				print("Please try again.")
-		else:
-			print("Please enter 'string' or 'file'.")
+	# Read infile
+	with open(infile, 'rb') as f:
+		secret = f.read()
 
 	# Encrypt secret & get JSON package
 	enc_package = encrypt_secret(secret, iters)
 
-	# Write it to timerelease.json
-	with open('timerelease.json', 'w') as f:
+	# Write outfile
+	with open(outfile, 'w') as f:
 		json.dump(enc_package, f, indent=4)
 
 
-def main_dec():
-	# Read from timerelease.json
-	with open('timerelease.json', 'r') as f:
+def main_dec(infile, outfile):
+	# Read infile
+	with open(infile, 'r') as f:
 		enc_package = json.load(f)
 
-	print(f"SECRET: {decrypt_secret(enc_package).decode()}")
+	# Decrypt
+	decrypted = decrypt_secret(enc_package)
+	
+	# Write outfile
+	with open(outfile, 'wb') as f:
+		f.write(decrypted)
+
+
+def main(argv=None):
+	# Read arguments
+	parser = argparse.ArgumentParser(prog="TimeRelease")
+	group = parser.add_mutually_exclusive_group(required=True)
+	group.add_argument(
+		"--encrypt",
+		nargs=2,
+		metavar=("INFILE", "OUTFILE"),
+		help="Encrypt input file to output file path",
+	)
+	group.add_argument(
+		"--decrypt",
+		nargs=2,
+		metavar=("INFILE", "OUTFILE"),
+		help="Decrypt input file to output file path",
+	)
+	args = parser.parse_args(argv)
+
+	if args.encrypt:
+		infile, outfile = Path(args.encrypt[0]), Path(args.encrypt[1])
+		if not infile.is_file():
+			print(f"{infile} does not exist or is not a file")
+			return -1
+		print(f"Encrypting {infile} -> {outfile}:")
+		main_enc(infile, outfile)
+
+	elif args.decrypt:
+		infile, outfile = Path(args.decrypt[0]), Path(args.decrypt[1])
+		if not infile.is_file():
+			print(f"{infile} does not exist or is not a file")
+			return -1
+		print(f"Decrypting {infile} -> {outfile}:")
+		main_dec(infile, outfile)
 
 
 if __name__ == "__main__":
-	# temporary logic lol
-	if MODE == "encrypt":
-		main_enc()
-	if MODE == "decrypt":
-		main_dec()
+	main()
