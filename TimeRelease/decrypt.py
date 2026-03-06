@@ -1,0 +1,44 @@
+import hashlib
+import time
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import unpad
+from .b64utils import base64_to_byte_str
+from tqdm import tqdm
+
+
+def decrypt_secret(enc_package, logging=True):
+	base = enc_package["base"]
+	modulus = enc_package["modulus"]
+	iterations = enc_package["iterations"]
+	secret_iv = base64_to_byte_str(enc_package["secret_iv"])
+	encrypted_secret = base64_to_byte_str(enc_package["encrypted_secret"])
+	key_iv = base64_to_byte_str(enc_package["key_iv"])
+	encrypted_key = base64_to_byte_str(enc_package["encrypted_key"])
+
+	# Compute puzzle result r
+	if logging: print("Unlocking encryption key...")
+	start_time = time.time()
+	r = base
+	if logging:
+		for _ in tqdm(range(iterations), desc="Unlocking", unit="iters"):
+			r = pow(r, 2, modulus)
+	else:
+		for _ in range(iterations):
+			r = pow(r, 2, modulus)
+	end_time = time.time()
+	if logging: print(f"Completed in {end_time - start_time:.2f} seconds")
+
+	# Derive AES key from r
+	if logging: print("Deriving AES key...")
+	derived_key = hashlib.sha256(str(r).encode()).digest()[:16]
+
+	# Decrypt AES key
+	if logging: print("Decrypting AES key...")
+	cipher2 = AES.new(derived_key, AES.MODE_CBC, iv=key_iv)
+	aes_key = unpad(cipher2.decrypt(encrypted_key), AES.block_size)
+
+	# Decrypt secret
+	if logging: print("Decrypting secret...")
+	cipher = AES.new(aes_key, AES.MODE_CBC, iv=secret_iv)
+	secret = unpad(cipher.decrypt(encrypted_secret), AES.block_size)
+	return secret
