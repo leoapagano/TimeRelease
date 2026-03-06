@@ -10,6 +10,7 @@ from Crypto.Random import get_random_bytes
 from sympy import nextprime
 from tqdm import tqdm
 from .b64utils import base64_to_byte_str, byte_str_to_base64
+from .bench import run_benchmark
 
 
 def decrypt_secret(enc_package, logging=True):
@@ -48,46 +49,6 @@ def decrypt_secret(enc_package, logging=True):
 	cipher = AES.new(aes_key, AES.MODE_CBC, iv=secret_iv)
 	secret = unpad(cipher.decrypt(encrypted_secret), AES.block_size)
 	return secret
-
-
-def run_single_benchmark(iterations, logging=True):
-	"""Runs a benchmark to determine how long it takes for the CPU to run a fixed number of iterations (returned as a float)."""
-	# Setup dummy puzzle parameters
-	if logging: print("Preparing time lock...")
-	p = nextprime(random.getrandbits(512))
-	q = nextprime(random.getrandbits(512))
-	modulus = p * q
-
-	# Execute & time it
-	if logging: print("Running benchmark...")
-	start_time = time.time()
-	r = random.randint(2, modulus - 1)
-	for _ in range(iterations):
-		r = pow(r, 2, modulus)
-	end_time = time.time()
-
-	return end_time - start_time
-
-
-def run_benchmark(benches=10, logging=True):
-	"""Determines how many iterations the user's CPU is capable of processing per second (as an integer)."""
-	# Repeat single benchmarks, doubling iterations until the time per benchmark is less than 1 second
-	iterations = 1
-	execution_time = 0
-	while execution_time < 1:
-		iterations *= 2
-		if logging: print(f"Running benchmark @ iterations={iterations}")
-		execution_time = run_single_benchmark(iterations, logging=logging)
-	
-	# Run benches (default: 10) benchmarks with this number of iterations
-	results = []
-	for i in range(benches):
-		if logging: print(f"Running standard benchmark {i+1} / {benches}")
-		results.append(run_single_benchmark(iterations, logging=logging))
-
-	# Determine average iterations/sec and return
-	avg = sum(results) / benches
-	return int(iterations // avg)
 
 
 def encrypt_secret(secret, iterations, logging=True):
