@@ -14,7 +14,7 @@ Always keep your "encrypted" file secret, treating it as if it were a password. 
 
 ## Table of Contents
 
-- [Interactive Usage](#interactive-usage)
+- [Usage](#usage)
 	- [Setup](#setup)
 	- [Encryption](#encryption)
 	- [Decryption](#decryption)
@@ -23,7 +23,7 @@ Always keep your "encrypted" file secret, treating it as if it were a password. 
 
 ---
 
-## Interactive Usage
+## Usage
 
 ### Setup
 
