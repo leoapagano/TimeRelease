@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "TimeRelease"
-version = "1.0.0"
+version = "2.0.0"
 requires-python = ">=3.13"
 description = "Python utility to cryptographically lock secrets for a preset amount of time."
 readme = "README.md"
@@ -35,9 +35,8 @@ classifiers = [
 	"Operating System :: MacOS :: MacOS X",
 ]
 dependencies = [
-	"mpmath~=1.0",
+	"gmpy2~=2.0",
 	"pycryptodome~=3.0",
-	"sympy~=1.0",
 	"tqdm~=4.0"
 ]
 
