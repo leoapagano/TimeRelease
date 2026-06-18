@@ -5,7 +5,7 @@ from typing import Any
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad
-from sympy import nextprime
+from gmpy2 import next_prime  # ty: ignore[unresolved-import]
 
 from .b64utils import byte_str_to_base64
 
@@ -29,8 +29,8 @@ def encrypt_secret(
 	# Generate N = p * q
 	if logging:
 		print("Preparing time lock...")
-	p = nextprime(random.getrandbits(512))
-	q = nextprime(random.getrandbits(512))
+	p = int(next_prime(random.getrandbits(512)))
+	q = int(next_prime(random.getrandbits(512)))
 	modulus = p * q
 
 	# Puzzle: compute r = base^(2^iterations) mod modulus

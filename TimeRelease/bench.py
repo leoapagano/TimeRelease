@@ -1,7 +1,7 @@
 import random
 import time
 
-from sympy import nextprime
+from gmpy2 import mpz, next_prime  # ty: ignore[unresolved-import]
 
 
 def run_single_benchmark(iterations: int, logging: bool = True) -> float:
@@ -13,17 +13,18 @@ def run_single_benchmark(iterations: int, logging: bool = True) -> float:
 	# Setup dummy puzzle parameters
 	if logging:
 		print("Preparing time lock...")
-	p = nextprime(random.getrandbits(512))
-	q = nextprime(random.getrandbits(512))
+	p = int(next_prime(random.getrandbits(512)))
+	q = int(next_prime(random.getrandbits(512)))
 	modulus = p * q
 
-	# Execute & time it
+	# Execute & time it (repeated modular squaring via gmpy2/GMP, matching decrypt)
 	if logging:
 		print("Running benchmark...")
 	start_time = time.time()
-	r = random.randint(2, modulus - 1)
+	r = mpz(random.randint(2, modulus - 1))
+	n = mpz(modulus)
 	for _ in range(iterations):
-		r = pow(r, 2, modulus)
+		r = (r * r) % n
 	end_time = time.time()
 
 	return end_time - start_time

@@ -4,6 +4,7 @@ from typing import Any
 
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import unpad
+from gmpy2 import mpz  # ty: ignore[unresolved-import]
 from tqdm import tqdm
 
 from .b64utils import base64_to_byte_str
@@ -22,17 +23,29 @@ def decrypt_secret(enc_package: dict[str, Any], logging: bool = True) -> bytes:
 	key_iv = base64_to_byte_str(enc_package["key_iv"])
 	encrypted_key = base64_to_byte_str(enc_package["encrypted_key"])
 
-	# Compute puzzle result r
+	# Compute puzzle result r via repeated modular squaring (gmpy2/GMP for speed)
 	if logging:
 		print("Unlocking encryption key...")
 	start_time = time.time()
-	r = base
+	r = mpz(base)
+	n = mpz(modulus)
 	if logging:
-		for _ in tqdm(range(iterations), desc="Unlocking", unit="iters"):
-			r = pow(r, 2, modulus)
+		# Update the progress bar in coarse chunks so tqdm's per-iteration cost
+		# does not slow the hot loop. Otherwise decryption runs measurably longer
+		# than the --time estimate, whose benchmark loop is uninstrumented.
+		chunk = max(1, iterations // 1000)
+		remaining = iterations
+		with tqdm(total=iterations, desc="Unlocking", unit="iters") as bar:
+			while remaining > 0:
+				step = min(chunk, remaining)
+				for _ in range(step):
+					r = (r * r) % n
+				remaining -= step
+				bar.update(step)
 	else:
 		for _ in range(iterations):
-			r = pow(r, 2, modulus)
+			r = (r * r) % n
+	r = int(r)
 	end_time = time.time()
 	if logging:
 		print(f"Completed in {end_time - start_time:.2f} seconds")
