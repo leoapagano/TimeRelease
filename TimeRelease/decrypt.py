@@ -30,8 +30,18 @@ def decrypt_secret(enc_package: dict[str, Any], logging: bool = True) -> bytes:
 	r = mpz(base)
 	n = mpz(modulus)
 	if logging:
-		for _ in tqdm(range(iterations), desc="Unlocking", unit="iters"):
-			r = (r * r) % n
+		# Update the progress bar in coarse chunks so tqdm's per-iteration cost
+		# does not slow the hot loop. Otherwise decryption runs measurably longer
+		# than the --time estimate, whose benchmark loop is uninstrumented.
+		chunk = max(1, iterations // 1000)
+		remaining = iterations
+		with tqdm(total=iterations, desc="Unlocking", unit="iters") as bar:
+			while remaining > 0:
+				step = min(chunk, remaining)
+				for _ in range(step):
+					r = (r * r) % n
+				remaining -= step
+				bar.update(step)
 	else:
 		for _ in range(iterations):
 			r = (r * r) % n
